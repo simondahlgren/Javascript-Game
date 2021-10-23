@@ -1,7 +1,7 @@
 kaboom({
 global: true,
 fullscreen: true,
-scale: 2,
+scale: 3,
 debug: true,
 clearColor: [ 0, 0, 0, 1],
 })
@@ -20,7 +20,9 @@ loadSprite('coin','wbKxhcd.png')
 loadSprite('evil-shroom','KPO3fR9.png')
 loadSprite('brick','pogC9x5.png')
 loadSprite('block','M6rwarW.png')
-loadSprite('mario','Wb1qfhK.png')
+loadSprite('memowee','oTK3R7Y.png')
+loadSprite('memowee-reverse','zaUEn1o.png')
+loadSprite('memowee-jump','7tncs1b.png')
 loadSprite('mushroom','0wMd92p.png')
 loadSprite('surprise','gesQ1KP.png')
 loadSprite('unboxed','bdrLpi6.png')
@@ -28,7 +30,6 @@ loadSprite('pipe-top-left','ReTPiWY.png')
 loadSprite('pipe-top-right','hj2GK4n.png')
 loadSprite('pipe-bottom-left','c1cYSbt.png')
 loadSprite('pipe-bottom-right','nqQ79eI.png')
-
 scene("game", ({level, score}) => {
 layers(['bg','obj','ui'], 'obj')
 
@@ -108,18 +109,17 @@ return {
 
 }
 
-const player = add([
+let player = add([
 
-sprite('mario'), 
+sprite('memowee'), 
 solid(),
 pos(30, 0), 
 body(), 
 big(),
 origin('bot'),
-scale(1),
+scale(0.1),
 
 ])
-
 
 
 player.on("headbump", (obj) => {
@@ -188,17 +188,20 @@ go("lose", {score: scoreLabel.value}
 
 keyDown("left", ()=>{
     player.move(-MOVE_SPEED, 0)
+    player.changeSprite("memowee-reverse")
 })
+
 keyDown("right", ()=>{
     player.move(MOVE_SPEED, 0)
+    player.changeSprite("memowee")
 })
 
 player.action(() => {
     if(player.grounded()) {
     isJumping= false
+
     }
 })
-
 
 
 keyPress("space", ()=>{
@@ -206,6 +209,7 @@ keyPress("space", ()=>{
     {   isJumping = true
         player.jump(JUMP_FORCE)
     }
+   
 
 })})
 
