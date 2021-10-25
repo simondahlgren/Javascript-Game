@@ -3,7 +3,7 @@ global: true,
 fullscreen: true,
 scale: 3,
 debug: true,
-clearColor: [ 0, 0, 0, 1],
+clearColor: [0,0,0,1]
 })
 
 const ENEMY_SPEED = 30
@@ -17,7 +17,9 @@ const FALLDEATH = 350
 
 loadRoot('https://i.imgur.com/')
 loadSprite('coin','wbKxhcd.png')
+loadSprite('memowee-flag','noe95cR.png')
 loadSprite('evil-shroom','KPO3fR9.png')
+loadSprite('apple','gZKZYQf.png')
 loadSprite('brick','pogC9x5.png')
 loadSprite('block','M6rwarW.png')
 loadSprite('memowee','oTK3R7Y.png')
@@ -30,9 +32,13 @@ loadSprite('pipe-top-left','ReTPiWY.png')
 loadSprite('pipe-top-right','hj2GK4n.png')
 loadSprite('pipe-bottom-left','c1cYSbt.png')
 loadSprite('pipe-bottom-right','nqQ79eI.png')
-scene("game", ({level, score}) => {
-layers(['bg','obj','ui'], 'obj')
+loadSprite('bg','pFTA78x.png')
 
+
+scene("game", ({level, score}) => {
+
+    layers(['bg','obj','ui'], 'obj')
+    add(sprite("bg"), layer ("bg"))
 const map = [
     '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ',
     '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ',
@@ -40,9 +46,9 @@ const map = [
     '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ',
     '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ',
     '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ',
-    '                                       =================================            =======================                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ',
+    '                                       =================================     % %   *   =======================                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ',
     '        %                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ',
-    '                          ^     ^   ^     ^  ^                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ',
+    '                          ^     ^   ^     ^  ^                                                                                                                          ^                              ^                              ^                     ^                                                                               ^                      ^                                                                                                                                                                                                                                                                                                                                                                                                                                   ^             ^                   ^                                    ^                     ^                                                                       ',
     '============================= ================================================================================   ===========================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================   =============================================================================',
     
 ]
@@ -60,7 +66,7 @@ const levelCfg = {
     '-':[sprite('pipe-top-left'), solid(), scale(0.5)  , "pipe"],
     '+':[sprite('pipe-top-right'), solid(), scale(0.5)  , "pipe"],
     '^': [sprite('evil-shroom'), solid(), "dangerous"],
-    '#': [sprite('mushroom'), solid(), "mushroom", body()]
+    '#': [sprite('mushroom')], 
 
 }
 const gameLevel = addLevel(map, levelCfg)
@@ -138,6 +144,9 @@ player.on("headbump", (obj) => {
 action("mushroom", (m) => {
     m.move(25,0)  
   })
+ // action("apple", (a) => {
+ //   a.move(25,0)  
+//  })
   
 player.collides("pipe", () => {
     keyDown("down", () => {
@@ -184,8 +193,9 @@ go("lose", {score: scoreLabel.value}
       scoreLabel.value += 1
       scoreLabel.text += scoreLabel.value
     })
-
-
+function shootFruit(p) {
+   const obj = add([sprite('apple'), pos(p)])
+}
 keyDown("left", ()=>{
     player.move(-MOVE_SPEED, 0)
     player.changeSprite("memowee-reverse")
@@ -199,17 +209,25 @@ keyDown("right", ()=>{
 player.action(() => {
     if(player.grounded()) {
     isJumping= false
-
-    }
-})
+    player.changeSprite("memowee") 
+ 
+}})
 
 
 keyPress("space", ()=>{
     if(player.grounded())
     {   isJumping = true
         player.jump(JUMP_FORCE)
-    }
-   
+        player.changeSprite("memowee-jump") 
+}
+
+keyPress("b", ()=>{
+ 
+        player.changeSprite("memowee-flag") 
+})
+
+
+
 
 })})
 
